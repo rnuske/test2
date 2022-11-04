@@ -6,7 +6,7 @@ steps:
 - name: myname
   image: rocker/r-base:latest
   commands:
-  - sed -i 's/test -x "${R_HOME}"/test -d "${R_HOME}"/' /usr/bin/R # vermutl docker zu alt auf cloud.drone.io   https://github.com/rocker-org/rocker/issues/482#issuecomment-1096914736
+  - sed -i 's/test -x/test -d/' /usr/bin/R # vermutl docker zu alt auf cloud.drone.io   https://github.com/rocker-org/rocker/issues/482#issuecomment-1096914736
   - R -e 'install.packages("tinytest")'
   - R CMD build --no-build-vignettes --no-manual .
   - FILE=$(ls -1t *.tar.gz | head -n 1)
