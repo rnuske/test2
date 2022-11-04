@@ -1,0 +1,7 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^data-raw$
+^README\.Rmd$
+^vignettes/Funktionalisiertes\.Rmd$
+^\.github$
+^\.drone\.yml$
