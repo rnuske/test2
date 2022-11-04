@@ -1,15 +1,16 @@
+# couldn't get r-base, r-ver, r-devel ... to behave.
+# so went with r-ci (https://github.com/eddelbuettel/r-ci).
+
 kind: pipeline
 type: docker
-name: rockerimage
+name: r-ci (light)
 
 steps:
-- name: myname
-  image: rocker/r-base:latest
+- name: build 'n check
+  image: rocker/r-bspm:22.04
   commands:
-  - sed -i 's/test -x/test -d/' /usr/bin/R # vermutl docker zu alt auf cloud.drone.io   https://github.com/rocker-org/rocker/issues/482#issuecomment-1096914736
-  - R -e 'install.packages("tinytest")'
-  - R CMD build --no-build-vignettes --no-manual .
-  - FILE=$(ls -1t *.tar.gz | head -n 1)
-  - export _R_CHECK_CRAN_INCOMING_=FALSE
-  - export _R_CHECK_FORCE_SUGGESTS_=FALSE
-  - R CMD check $FILE --no-vignettes --no-manual --as-cran --install-args=--install-tests
+  - wget https://eddelbuettel.github.io/r-ci/run.sh && chmod 0755 run.sh
+  - ./run.sh bootstrap
+  - apt-get install -y --no-install-recommends libgeos-dev
+  - ./run.sh install_deps
+  - export _R_CHECK_FORCE_SUGGESTS_="false"; ./run.sh run_tests
